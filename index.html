@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FileShield AI | Malware Detector</title>
+<style>
+:root{--bg:#090d16;--card:#111827;--border:#1f2937;--accent:#00f2fe;--blue:#38bdf8;--text:#f8fafc;--muted:#94a3b8;--safe:#10b981;--warn:#f59e0b;--danger:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}
+#welcome{position:fixed;inset:0;background:rgba(6,10,19,.95);backdrop-filter:blur(10px);z-index:999;display:flex;justify-content:center;align-items:center;cursor:pointer;transition:.4s;padding:20px}
+#welcome.hide{opacity:0;visibility:hidden;pointer-events:none}
+.w-card{background:linear-gradient(145deg,#131c31,#0b101d);border:1px solid var(--accent);box-shadow:0 0 30px rgba(0,242,254,.25);border-radius:18px;padding:36px 24px;max-width:480px;width:100%;text-align:center}
+.w-title{font-size:28px;font-weight:800;color:var(--accent);margin:10px 0 6px}
+.w-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.w-lbl{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);margin-bottom:8px}
+.w-name{font-size:18px;font-weight:700;color:#fff;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);padding:14px;border-radius:12px;margin-bottom:22px}
+.w-tap{font-size:13px;color:#cbd5e1}
+.box{max-width:650px;width:100%;margin-top:15px}
+header{text-align:center;margin-bottom:24px}
+header h1{font-size:30px;color:var(--accent)}
+header p{color:var(--muted);font-size:13px;margin-top:5px}
+.up{display:block;background:var(--card);border:2px dashed #334155;border-radius:16px;padding:36px 20px;text-align:center;cursor:pointer}
+.up:hover{border-color:var(--accent)}
+.up input{display:none}
+.btn{display:inline-block;margin-top:12px;padding:10px 22px;background:linear-gradient(90deg,#0284c7,#00f2fe);color:#050811;font-weight:700;border-radius:8px;font-size:14px}
+#rep{display:none;margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.verd{padding:14px;border-radius:10px;font-weight:700;text-align:center;margin-bottom:16px}
+.low{background:rgba(16,185,129,.15);border:1px solid var(--safe);color:#34d399}
+.med{background:rgba(245,158,11,.15);border:1px solid var(--warn);color:#fbbf24}
+.high{background:rgba(239,68,68,.15);border:1px solid var(--danger);color:#f87171}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.m{background:#0b101d;border:1px solid var(--border);padding:12px;border-radius:10px;text-align:center}
+.mv{font-size:18px;font-weight:700;color:var(--blue)}
+.ml{font-size:11px;color:var(--muted);margin-top:4px}
+.row{margin-bottom:10px;font-size:12px;word-break:break-all;background:#0b101d;padding:10px;border-radius:8px;border:1px solid var(--border)}
+.row b{color:var(--blue);display:block;margin-bottom:3px}
+footer{margin-top:auto;padding-top:25px;text-align:center;font-size:12px;color:var(--muted)}
+@media(max-width:500px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="welcome" onclick="this.classList.add('hide')">
+  <div class="w-card">
+    <div style="font-size:50px">🛡️</div>
+    <div class="w-title">FileShield AI</div>
+    <div class="w-sub">Client-Side Machine Learning & Static Malware Analyzer</div>
+    <div class="w-lbl">Designed & Developed By</div>
+    <div class="w-name">Fatehi Abdulfattah Mohammed Ali Alshami</div>
+    <div class="w-tap">Tap anywhere on the screen to enter • اضغط في أي مكان للدخول</div>
+  </div>
+</div>
+<div class="box">
+  <header>
+    <h1>🛡️ FileShield</h1>
+    <p>AI-Powered Static Malware Detector | تحليل الملفات واكتشاف التهديدات قبل التشغيل</p>
+  </header>
+  <label class="up">
+    <input type="file" onchange="scan(this.files)">
+    <div style="font-size:40px;margin-bottom:8px">📂</div>
+    <b>Select Any File to Scan</b>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px">100% Private: Analyzed locally via ML heuristics without execution</div>
+    <div class="btn">Choose File • اختر ملفاً</div>
+  </label>
+  <div id="rep">
+    <div id="verd" class="verd"></div>
+    <div class="grid">
+      <div class="m"><div class="mv" id="sz">0 KB</div><div class="ml">File Size</div></div>
+      <div class="m"><div class="mv" id="en">0.00</div><div class="ml">Shannon Entropy</div></div>
+      <div class="m"><div class="mv" id="sc">0%</div><div class="ml">ML Threat Score</div></div>
+    </div>
+    <div class="row"><b>Detected File Signature:</b><span id="tp"></span></div>
+    <div class="row"><b>SHA-256 Hash:</b><span id="hs"></span></div>
+    <div class="row"><b>Suspicious Patterns:</b><span id="pt"></span></div>
+  </div>
+</div>
+<footer>Developed by <b style="color:#fff">Fatehi Abdulfattah Mohammed Ali Alshami</b> • Static Heuristic & ML Engine</footer>
+<script>
+const bad=["powershell","cmd.exe","eval(","exec(","base64_decode","createremotethread","virtualalloc","writeprocessmemory","wscript.shell","regwrite","downloadfile","invoke-expression","chmod +x","/bin/sh","autoopen","shellexecute"];
+async function sha(buf){const h=await crypto.subtle.digest('SHA-256',buf);return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+function ent(b){if(!b.length)return 0;const c=new Array(256).fill(0);for(let i=0;i<b.length;i++)c[b[i]]++;let e=0;for(let i=0;i<256;i++)if(c[i]>0){const p=c[i]/b.length;e-=p*Math.log2(p)}return e}
+function sig(b){const a=b.at(0),x=b.at(1),y=b.at(2),z=b.at(3);if(b.length>=2&&a===0x4D&&x===0x5A)return{t:"Windows Executable (PE/EXE/DLL)",e:1};if(b.length>=4&&a===0x7F&&x===0x45&&y===0x4C&&z===0x46)return{t:"Linux Executable (ELF)",e:1};if(b.length>=4&&a===0x50&&x===0x4B&&y===0x03&&z===0x04)return{t:"ZIP Archive / Android APK / DOCX",e:0.4};if(b.length>=4&&a===0x25&&x===0x50&&y===0x44&&z===0x46)return{t:"PDF Document",e:0.1};return{t:"Generic / Script / Text / Media",e:0}}
+async function scan(fl){const f=fl.item(0);if(!f)return;const buf=await f.arrayBuffer(),b=new Uint8Array(buf),h=await sha(buf),e=ent(b),s=sig(b);let na=0;for(let i=0;i<b.length;i++)if(b[i]<32||b[i]>126)na++;const txt=new TextDecoder('utf-8',{fatal:false}).decode(b).toLowerCase(),found=bad.filter(p=>txt.includes(p)),z=-4.2+(.45*e)+(1.35*found.length)+(1.8*s.e)+(.6*(b.length?na/b.length:0)),sc=Math.min(99.9,Math.max(.1,(1/(1+Math.exp(-z)))*100)),vb=document.getElementById('verd');vb.className='verd';if(sc>=65||found.length>=3){vb.classList.add('high');vb.textContent=`🚨 MALICIOUS / HIGH RISK (${sc.toFixed(1)}%)`}else if(sc>=35||e>7.4||found.length>0){vb.classList.add('med');vb.textContent=`⚠️ SUSPICIOUS / CAUTION (${sc.toFixed(1)}%)`}else{vb.classList.add('low');vb.textContent=`✅ CLEAN / SAFE (${sc.toFixed(1)}%)`}document.getElementById('sz').textContent=(f.size/1024).toFixed(2)+' KB';document.getElementById('en').textContent=e.toFixed(3)+' / 8';document.getElementById('sc').textContent=sc.toFixed(1)+'%';document.getElementById('tp').textContent=s.t;document.getElementById('hs').textContent=h;document.getElementById('pt').textContent=found.length?found.join(', '):'None detected';document.getElementById('rep').style.display='block'}
+</script>
+</body>
+</html>
